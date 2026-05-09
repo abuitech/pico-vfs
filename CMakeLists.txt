@@ -1,13 +1,29 @@
-cmake_minimum_required(VERSION 3.13...3.27)
+# # == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
+# if(WIN32)
+#     set(USERHOME $ENV{USERPROFILE})
+# else()
+#     set(USERHOME $ENV{HOME})
+# endif()
+# set(sdkVersion 2.2.0)
+# set(toolchainVersion 14_2_Rel1)
+# set(picotoolVersion 2.2.0-a4)
+# set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+# if (EXISTS ${picoVscode})
+#     include(${picoVscode})
+# endif()
+# # ====================================================================================
+# set(PICO_BOARD pico CACHE STRING "Board type")
 
-include(vendor/pico_sdk_import.cmake)
-include(pico_vfs.cmake)
-set(FAMILY rp2040)
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
+# cmake_minimum_required(VERSION 3.13...3.27)
 
-project(pico-vfs C CXX ASM)
-pico_sdk_init()
+# include(vendor/pico_sdk_import.cmake)
+# include(pico_vfs.cmake)
+# set(FAMILY rp2040)
+# set(CMAKE_C_STANDARD 11)
+# set(CMAKE_CXX_STANDARD 17)
+
+# project(examples/usb_logger/usb_logger C CXX ASM)
+# pico_sdk_init()
 
 # Blockdevice header library
 add_library(blockdevice INTERFACE)

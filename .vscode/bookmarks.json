@@ -1,0 +1,79 @@
+{
+	"files": [
+		{
+			"path": "src/blockdevice/flash.c",
+			"bookmarks": [
+				{
+					"line": 119,
+					"column": 0,
+					"label": "size"
+				},
+				{
+					"line": 124,
+					"column": 0,
+					"label": "blockdevice_flash_create"
+				}
+			]
+		},
+		{
+			"path": "include/filesystem/vfs.h",
+			"bookmarks": [
+				{
+					"line": 18,
+					"column": 0,
+					"label": "#define PICO_FS_DEFAULT_SIZE"
+				}
+			]
+		},
+		{
+			"path": "examples/fs_inits/fs_init_fat.c",
+			"bookmarks": [
+				{
+					"line": 12,
+					"column": 0,
+					"label": "fs_init"
+				}
+			]
+		},
+		{
+			"path": "src/filesystem/fat.c",
+			"bookmarks": [
+				{
+					"line": 93,
+					"column": 0,
+					"label": "disk_get_sector_size"
+				},
+				{
+					"line": 103,
+					"column": 0,
+					"label": "disk_get_sector_count"
+				},
+				{
+					"line": 648,
+					"column": 0,
+					"label": "filesystem_fat_create"
+				}
+			]
+		},
+		{
+			"path": "examples/usb_logger/main.c",
+			"bookmarks": [
+				{
+					"line": 61,
+					"column": 0,
+					"label": "filesystem_init"
+				}
+			]
+		},
+		{
+			"path": "../../../../Users/arnau/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/include/hardware/flash.h",
+			"bookmarks": [
+				{
+					"line": 45,
+					"column": 0,
+					"label": "FLASH_SECTOR_SIZE"
+				}
+			]
+		}
+	]
+}
