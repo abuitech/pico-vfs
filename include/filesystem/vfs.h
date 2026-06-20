@@ -40,7 +40,7 @@ bool fs_init(void);
  * \retval 0 Format succeeded.
  * \retval -1 Format failed. Error codes are indicated by errno.
  */
-int fs_format(filesystem_t *fs, blockdevice_t *device);
+int fs_format(filesystem_t *fs, blockdevice_t *device, const char *label);
 
 /*! \brief Mount a file system
  * \ingroup filesystem
@@ -97,6 +97,17 @@ int fs_info(const char *path, filesystem_t **fs, blockdevice_t **device);
  * \return Pointer to the corresponding message string.
  */
 char *fs_strerror(int error);
+
+/*! \brief Get the data address of the sector corresponding to the current file position
+ * \ingroup file
+ *
+ * Get the data address of the sector corresponding to the current file position.
+ * This function returns the address in the block device corresponding to the sector of the current file position. If the block device supports memory mapping, the address can be directly accessed. If the block device does not support memory mapping, NULL is returned.
+ *
+ * \param fildes File descriptor of the file for which to get the sector address.
+ * \return Pointer to the corresponding sector data address.
+ */
+uint8_t *get_sector_address(int fildes);
 
 #ifdef __cplusplus
 }

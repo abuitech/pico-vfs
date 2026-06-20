@@ -70,7 +70,7 @@ typedef struct filesystem {
 
     int (*mount)(struct filesystem *fs, blockdevice_t *device, bool pending);
     int (*unmount)(struct filesystem *fs);
-    int (*format)(struct filesystem *fs, blockdevice_t *device);
+    int (*format)(struct filesystem *fs, blockdevice_t *device, const char *label);
 
     int (*remove)(struct filesystem *fs, const char *path);
     int (*rename)(struct filesystem *fs, const char *oldpath, const char *newpath);
@@ -87,6 +87,7 @@ typedef struct filesystem {
     off_t (*file_tell)(struct filesystem *fs, fs_file_t *file);
     off_t (*file_size)(struct filesystem *fs, fs_file_t *file);
     int (*file_truncate)(struct filesystem *fs, fs_file_t *file, off_t length);
+    uint8_t* (*file_get_sector_address)(struct filesystem *fs, fs_file_t *file);
 
     int (*dir_open)(struct filesystem *fs, fs_dir_t *dir, const char *path);
     int (*dir_close)(struct filesystem *fs, fs_dir_t *dir);

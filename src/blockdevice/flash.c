@@ -117,6 +117,10 @@ static int trim(blockdevice_t *device, bd_size_t addr, bd_size_t size) {
     return BD_ERROR_OK;
 }
 
+static uint8_t *get_start_address(blockdevice_t *device) {
+    return (uint8_t *)(XIP_BASE + flash_target_offset(device));
+}
+
 static bd_size_t size(blockdevice_t *device) {
     blockdevice_flash_config_t *config = device->config;
     return (bd_size_t)config->length;
@@ -146,6 +150,7 @@ blockdevice_t *blockdevice_flash_create(uint32_t start, size_t length) {
     device->trim = trim;
     device->sync = sync;
     device->size = size;
+    device->get_start_address = get_start_address;
     device->read_size = 1;
     device->erase_size = FLASH_SECTOR_SIZE;  // 4096 byte
     device->program_size = FLASH_PAGE_SIZE;  // 256 byte

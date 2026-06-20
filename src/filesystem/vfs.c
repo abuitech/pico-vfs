@@ -85,14 +85,14 @@ static bool is_valid_file_descriptor(int fildes) {
         return true;
 }
 
-int fs_format(filesystem_t *fs, blockdevice_t *device) {
+int fs_format(filesystem_t *fs, blockdevice_t *device, const char *label) {
     if (!device->is_initialized) {
         int err = device->init(device);
         if (err != BD_ERROR_OK) {
             return _error_remap(err);
         }
     }
-    return fs->format(fs, device);
+    return fs->format(fs, device, label);
 }
 
 int fs_mount(const char *dir, filesystem_t *fs, blockdevice_t *device) {
@@ -163,7 +163,7 @@ int fs_reformat(const char *path) {
         recursive_mutex_exit(&_mutex);
         return _error_remap(err);
     }
-    err = fs->format(fs, device);
+    err = fs->format(fs, device, NULL);
     if (err) {
         recursive_mutex_exit(&_mutex);
         return _error_remap(err);
@@ -466,7 +466,6 @@ int _close(int fildes) {
     return _error_remap(err);
 }
 
-
 extern void stdio_flush(void);  // from pico_stdio/stcio.c
 
 // _write to STDOUT_FILENO and STDERR_FILENO falls back to `putchar` in the pico_stdio library
@@ -539,6 +538,33 @@ ssize_t _read(int fildes, void *buf, size_t nbyte) {
     ssize_t size = fs->file_read(fs, file, buf, nbyte);
 
     return _error_remap(size);
+}
+
+uint8_t* get_sector_address(int fildes)
+{
+    auto_init_recursive_mutex(_mutex);
+    recursive_mutex_enter_blocking(&_mutex);
+
+    if (fildes == STDIN_FILENO) {
+        recursive_mutex_exit(&_mutex);
+        return NULL;
+    }
+
+    if (!is_valid_file_descriptor(fildes)) {
+        recursive_mutex_exit(&_mutex);
+        return NULL;
+    }
+    fs_file_t *file = file_descriptor[FILENO_INDEX(fildes)].file;
+    filesystem_t *fs = file_descriptor[FILENO_INDEX(fildes)].filesystem;
+    if (fs == NULL || file == NULL) {
+        recursive_mutex_exit(&_mutex);
+        return NULL;
+    }
+
+    uint8_t *addr = fs->file_get_sector_address(fs, file);
+
+    recursive_mutex_exit(&_mutex);
+    return addr;
 }
 
 off_t _lseek(int fildes, off_t offset, int whence) {

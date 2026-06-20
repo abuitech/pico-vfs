@@ -140,7 +140,8 @@ static void _init_config(struct lfs_config *config, blockdevice_t *device) {
     config->context = device;
 }
 
-static int format(filesystem_t *fs, blockdevice_t *device) {
+static int format(filesystem_t *fs, blockdevice_t *device, const char *label) {
+    (void)label;
     filesystem_littlefs_context_t *context = fs->context;
     mutex_enter_blocking(&context->_mutex);
 
@@ -366,6 +367,13 @@ static int file_truncate(filesystem_t *fs, fs_file_t *file, off_t length) {
     return _error_remap(res);
 }
 
+static uint8_t* file_get_sector_address(struct filesystem *fs, fs_file_t *file) {
+    filesystem_littlefs_context_t *context = fs->context;
+    lfs_file_t *f = file->context;
+
+    return NULL;
+}
+
 static int dir_open(filesystem_t *fs, fs_dir_t *dir, const char *path) {
     filesystem_littlefs_context_t *context = fs->context;
     lfs_dir_t *d = calloc(1, sizeof(lfs_dir_t));
@@ -446,6 +454,7 @@ filesystem_t *filesystem_littlefs_create(uint32_t block_cycles,
     fs->file_tell = file_tell;
     fs->file_size = file_size;
     fs->file_truncate = file_truncate;
+    fs->file_get_sector_address = file_get_sector_address;
     fs->dir_open = dir_open;
     fs->dir_close = dir_close;
     fs->dir_read = dir_read;

@@ -15,7 +15,7 @@ bool __attribute__((weak)) fs_init(void) {
 
     int err = fs_mount("/", fs, device);
     if (err == -1) {
-        err = fs->format(fs, device);
+        err = fs->format(fs, device, NULL);
         if (err == -1) {
             return false;
         }

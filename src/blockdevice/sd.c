@@ -1021,6 +1021,10 @@ static int trim(blockdevice_t *device, bd_size_t addr, bd_size_t size) {
     return status;
 }
 
+static uint8_t *get_start_address(blockdevice_t *device) {
+    return NULL;
+}
+
 static bd_size_t size(blockdevice_t *device) {
     blockdevice_sd_config_t *config = device->config;
     return config->block_size * config->total_sectors;
@@ -1068,6 +1072,7 @@ blockdevice_t *blockdevice_sd_create(spi_inst_t *spi_inst,
     device->program = program;
     device->trim = trim;
     device->size = size;
+    device->get_start_address = get_start_address;
     device->read_size = block_size;
     device->erase_size = block_size;
     device->program_size = block_size;

@@ -227,7 +227,7 @@ static int unmount(filesystem_t *fs) {
     return fat_error_remap(res);
 }
 
-static int format(filesystem_t *fs, blockdevice_t *device) {
+static int format(filesystem_t *fs, blockdevice_t *device, const char *label) {
     filesystem_fat_context_t *context = fs->context;
     mutex_enter_blocking(&context->_mutex_format);
 
@@ -293,6 +293,11 @@ static int format(filesystem_t *fs, blockdevice_t *device) {
         fs->unmount(fs);
         mutex_exit(&context->_mutex_format);
         return fat_error_remap(res);
+    }
+
+    if (label != NULL)
+    {
+        f_setlabel(label);
     }
 
     err = fs->unmount(fs);
@@ -584,6 +589,15 @@ static int file_truncate(filesystem_t *fs, fs_file_t *file, off_t length) {
     return 0;
 }
 
+static uint8_t* file_get_sector_address(struct filesystem *fs, fs_file_t *file) {
+    filesystem_fat_context_t *context = fs->context;
+    fat_file_t *fat_file = file->context;
+    FIL* fil = &fat_file->file;
+    blockdevice_t* device = _ffs[(int)context->fatfs.pdrv];
+
+    return fil->sect * disk_get_sector_size(context->id) + device->get_start_address(device);
+}
+
 static int dir_open(filesystem_t *fs, fs_dir_t *dir, const char *path) {
     filesystem_fat_context_t *context = fs->context;
     char fpath[PATH_MAX];
@@ -671,6 +685,7 @@ filesystem_t *filesystem_fat_create() {
     fs->file_tell = file_tell;
     fs->file_size = file_size;
     fs->file_truncate = file_truncate;
+    fs->file_get_sector_address = file_get_sector_address;
     fs->dir_open = dir_open;
     fs->dir_close = dir_close;
     fs->dir_read = dir_read;

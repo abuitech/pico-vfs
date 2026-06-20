@@ -126,6 +126,10 @@ static int trim(blockdevice_t *device, bd_size_t addr, bd_size_t length) {
     return BD_ERROR_OK;
 }
 
+static uint8_t *get_start_address(blockdevice_t *device) {
+    return NULL;
+}
+
 static bd_size_t size(blockdevice_t *device) {
     blockdevice_loopback_config_t *config = device->config;
     return (bd_size_t)config->capacity;
@@ -150,6 +154,7 @@ blockdevice_t *blockdevice_loopback_create(const char *path, size_t capacity, si
     device->trim = trim;
     device->sync = __sync;
     device->size = size;
+    device->get_start_address = get_start_address;
     device->read_size = block_size;
     device->erase_size = block_size;
     device->program_size = block_size;

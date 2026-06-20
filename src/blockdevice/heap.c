@@ -110,6 +110,11 @@ static int trim(blockdevice_t *device, bd_size_t addr, bd_size_t length) {
     return BD_ERROR_OK;
 }
 
+static uint8_t *get_start_address(blockdevice_t *device) {
+    blockdevice_heap_config_t *config = device->config;
+    return config->heap;
+}
+
 static bd_size_t size(blockdevice_t *device) {
     blockdevice_heap_config_t *config = device->config;
     return (bd_size_t)config->size;
@@ -134,6 +139,7 @@ blockdevice_t *blockdevice_heap_create(size_t length) {
     device->trim = trim;
     device->sync = sync;
     device->size = size;
+    device->get_start_address = get_start_address;
     device->read_size = PICO_VFS_BLOCKDEVICE_HEAP_BLOCK_SIZE;
     device->erase_size = PICO_VFS_BLOCKDEVICE_HEAP_BLOCK_SIZE;
     device->program_size = PICO_VFS_BLOCKDEVICE_HEAP_BLOCK_SIZE;
