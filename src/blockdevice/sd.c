@@ -1039,14 +1039,14 @@ blockdevice_t *blockdevice_sd_create(spi_inst_t *spi_inst,
                                      bool enable_crc)
 {
     if (spi_inst == spi0) {
-        assert(mosi == 3 || mosi == 7 || mosi == 19 || mosi == 23);
-        assert(miso == 0 || miso == 4 || miso == 16 || miso == 20);
-        assert(sclk == 2 || sclk == 6 || sclk == 18 || sclk == 22);
+        assert(mosi == 3 || mosi == 7 || mosi == 19 || mosi == 23 || mosi == 35 || mosi == 39);
+        assert(miso == 0 || miso == 4 || miso == 16 || miso == 20 || miso == 32 || miso == 36);
+        assert(sclk == 2 || sclk == 6 || sclk == 18 || sclk == 22 || sclk == 34 || sclk == 38);
         // assert(cs == 1 || cs == 5 || cs == 17 || cs == 21);
     } else if (spi_inst == spi1) {
-        assert(mosi == 11 || mosi == 15 || mosi == 27);
-        assert(miso == 8 || miso == 12 || mosi == 24 || mosi == 28);
-        assert(sclk == 10 || sclk == 14 || sclk == 26);
+        assert(mosi == 11 || mosi == 15 || mosi == 27 || mosi == 31 || mosi == 43 || mosi == 47);
+        assert(miso == 8 || miso == 12 || miso == 24 || miso == 28 || miso == 40 || miso == 44);
+        assert(sclk == 10 || sclk == 14 || sclk == 26 || sclk == 30 || sclk == 42 || sclk == 46);
         // assert(cs == 9 || cs == 13 || cs == 25 || cs == 29);
     } else {
         assert(spi_inst == spi0 || spi_inst == spi1);
@@ -1087,7 +1087,7 @@ blockdevice_t *blockdevice_sd_create(spi_inst_t *spi_inst,
     config->hz   = hz;
     config->enable_crc = enable_crc;
     config->card_type = SDCARD_NONE;
-    config->block_size = 512;
+    config->block_size = block_size;
     mutex_init(&config->_mutex);
     device->config = config;
 
